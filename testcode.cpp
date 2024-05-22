@@ -292,7 +292,7 @@ namespace ckkseif {
 
         Ciphertext<DCRTPoly> c2;
 
-        for(usint i=0; i<1; i++){
+        for(usint i=0; i<iteration; i++){
             TIC(t);
             // vector<double> coscoeff = EvalcoeffCos(K); 
             // c2 = cc->EvalPoly(c1, coscoeff);

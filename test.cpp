@@ -28,6 +28,15 @@ void HELUTExperiments(usint iteration){
     AnotherIndicatorTests(iteration);
 }
 
+void dezTests(usint iteration){
+    dezTest(3, 8, iteration, 35); 
+    dezTest(6, 8, iteration, 35); 
+    dezTest(3, 8, iteration, 50); 
+    dezTest(6, 8, iteration, 50); 
+
+}
+
+
 
 int main(int argc, char **argv) {
 
@@ -39,6 +48,7 @@ int main(int argc, char **argv) {
     bool anotherindicator=false;
     bool lutsynth=false;
     bool embedding=false;
+    bool dez=false;
 
 
     while (1) {
@@ -50,6 +60,7 @@ int main(int argc, char **argv) {
             {"anotherindicator", no_argument, 0,  'a' },
             {"lutsynth", no_argument, 0,  'l' },
             {"embedding", no_argument, 0,  'e' },
+            {"dez", no_argument, 0,  'd' },
             {"all", no_argument,       0,  'x' },
 
         };
@@ -95,6 +106,10 @@ int main(int argc, char **argv) {
             embedding=true;
             break;
 
+        case 'd':
+            dez=true;
+            break;
+
         case 'x':
             indicator=true;
             anotherindicator=true;
@@ -120,7 +135,9 @@ int main(int argc, char **argv) {
     if(lutsynth)LUTSynthTests(8, 2, 16, iteration);
     if(embedding)EmbeddingSIMDTests(iteration);
     if(anotherindicator)AnotherIndicatorTests(iteration);
-   
+    if(dez)dezTests(iteration);
+
+
     return 0;
 
 }   
