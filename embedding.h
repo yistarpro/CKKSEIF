@@ -4,6 +4,8 @@
 #include "openfhe.h"
 #include "utils.h"
 #include <iostream>
+#include <map>
+
 
 using namespace lbcrypto;
 using namespace std;
@@ -22,9 +24,25 @@ public:
 	string pathWeight="data/6B50d8_8weight.txt";
 
 	vector<double> weight;
-	//map<string, vector<usint>> wordtoindex;
+	map<string, vector<usint>> wordtoindex;
 
     CompressedEmbedding(const usint m=8, const usint k=8, const usint outputdimension=50);
+
+};
+
+
+class LogregModel {
+
+public:
+	long m=8;
+	long k=8;
+	long outputdimension=50;
+	//path of weight
+	string pathWeight="data/6B50d8_8logreg.txt";
+
+	vector<double> weight;
+
+    LogregModel(const usint m=8, const usint k=8, const usint outputdimension=50);
 
 };
 
