@@ -1920,6 +1920,9 @@ namespace ckkseif {
         vector<double> timeEval2(iteration);
         // vector<double> timeEval(iteration);
 
+        vector<string> resultlog(iteration+2);
+        resultlog[0] = "Test on bound: " + to_string(bound) + ", number of codes: " + to_string(numcode) + " , output dimension : " + to_string(outputdimension);
+
         //vector<double> timeSq(iteration);
         //vector<double> timeCleanse(iteration);
 
@@ -1953,7 +1956,7 @@ namespace ckkseif {
         // B. Step 2: Key Generation
         auto keys = cc->KeyGen();
         cc->EvalMultKeyGen(keys.secretKey);
-        AddRotKeyForEmb(keys.secretKey, cc, batchSize);
+        AddRotKeyForEmb(keys.secretKey, cc, 512);
 
         // Step 3: Encoding and encryption of inputs
         std::cout << "!!!!!!!!!!!!!!! LogisticRegression Test !!!!!!!!!!!!!!!" << std::endl;
@@ -1963,10 +1966,8 @@ namespace ckkseif {
 
         CompressedEmbedding model(numcode, bound, outputdimension);
         LogregModel logreg(numcode, bound, outputdimension);
-
         //for(usint i=0; i<8; i++)std::cout << x1[i] << " , ";
         //for(usint i=0; i<16; i++)std::cout << table[i] << " , ";
-
 
         // Encrypt the encoded vectors
 
@@ -1976,7 +1977,9 @@ namespace ckkseif {
         // std::cout << lengthvec << std::endl;
         
         usint totalauc=0;
-        double totalloss = 0.0;
+        // double totalloss = 0.0;
+        double maxerror = 0.0;
+
 
         for(usint i=0; i<iteration; i++){
             std::vector<string> sentence = 	readsentence(512, i, 128);
@@ -2012,9 +2015,16 @@ namespace ckkseif {
             // std::cout << "Evaluation time: " << timeEval[i] << " ms" << std::endl;
 
             vector<double> predict_val = inference_plain(cc, emb, 512, lengthvec, model, logreg);
-            double loss = 0;
+            // double loss = 0;
             cc->Decrypt(keys.secretKey, c3, &result);
             vector<double> res = result->GetRealPackedValue();
+            // double maxx = 0;
+            // for(usint k=0; k<batchSize;k++){
+            //     if(maxx < res[k])maxx = res[k];
+            //     if(maxx < -res[k])maxx = -res[k];
+
+            // }
+            // cout << "maximum " << maxx << endl;
 
             for(usint k=0; k< numpredicts; k++){
                 if(res[512*k] > 0){
@@ -2022,19 +2032,23 @@ namespace ckkseif {
                 }else{
                     predict[k]=0;
                 }
-                // cout << res[512*k] << endl;
+                // cout << res[512*k] << ", " << predict_val[k] << endl;
+                double tmpgap= predict_val[k]-res[512*k];
+                if(maxerror < tmpgap)maxerror = tmpgap;
+                if(maxerror < -tmpgap)maxerror = -tmpgap;
 
                 if(predict[k]==answer[k]){
                     auc+=1;
                 }
 
-                loss += (predict_val[k]-res[512*k]) * (predict_val[k]-res[512*k]);
+                // loss += (predict_val[k]-res[512*k]) * (predict_val[k]-res[512*k]);
 
             }
-            loss /= (double) numpredicts;
+            // loss /= (double) numpredicts;
             totalauc+=auc;
-            totalloss+=loss;
-            cout << "Estimated accuracy:" << auc << " per " << numpredicts << ", Loss: " << loss << endl;
+            // totalloss+=loss;
+            cout << "Estimated accuracy:" << auc << " per " << numpredicts << ", Maxerror: " << maxerror << endl;
+            resultlog[i+1] = "Estimated accuracy:" + to_string(auc) + " per " + to_string(numpredicts) + ", Maxerror: " + to_string(maxerror);
 
             //result->SetLength(8);
             //std::cout.precision(8);
@@ -2050,8 +2064,11 @@ namespace ckkseif {
         statTime(timeEval2, iteration);
         // std::cout << "Total: ";
         // statTime(timeEval, iteration);
-        cout << "Estimated accuracy:" << (double)totalauc /(double)(numpredicts*iteration) << ", Loss: " << totalloss / (double)iteration << ", " << -log2(totalloss / (double)iteration) endl;
+        // cout << "Estimated accuracy:" << (double)totalauc /(double)(numpredicts*iteration) << ", Loss: " << totalloss / (double)iteration << ", " << -log2(totalloss / (double)iteration) <<  endl;
+        cout << "Estimated accuracy:" << (double)totalauc /(double)(numpredicts*iteration) << ", maxerror: " << maxerror << ", " << -log2(maxerror) <<  endl;
+        resultlog[iteration+1] = "Estimated accuracy:" + to_string((double)totalauc /(double)(numpredicts*iteration)) + ", maxerror: " + to_string(maxerror) + ", " + to_string(-log2(maxerror));
 
+	    addRes(resultlog, "logreg_result.txt", iteration);
 
     } 
 
@@ -2062,7 +2079,7 @@ namespace ckkseif {
 
         for(usint i = 0; i<2 ; i++){
             for(usint j = 0; j< 5; j++){
-                LogregTest(bound[j], numcode[j], outputdimension[i], iteration);
+                if(checkline("logreg_result.txt") < (iteration+2)*(5*i+j+1))LogregTest(bound[j], numcode[j], outputdimension[i], iteration);
             }
         }
     }

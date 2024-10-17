@@ -206,6 +206,8 @@ int main(int argc, char **argv) {
     if(embedding)EmbeddingSIMDTests(iteration);
     if(anotherindicator)AnotherIndicatorTests(iteration);
     if(logregt){
+	    // LogregTest(8, 8, 50, 1);
+
         LogregTests(iteration);
     }
 
@@ -254,6 +256,7 @@ int main(int argc, char **argv) {
         SortFullTest(46,256,128); 
     }
 
+    
     //IndicatorTests(1, 59);
     //AnotherIndicatorTests(1);
 

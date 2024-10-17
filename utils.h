@@ -50,6 +50,9 @@ namespace ckkseif {
 	// static void writePt(string* plain, complex<double>* result,long n, long vectorsize, long m, long k,long repeatnum, long numfeature);
 	// static void addPt(complex<double>* result,long n, long vectorsize, long m, long k,long repeatnum, long numfeature);
 
+	//Write down the result of Experiments
+	usint checkline(const string path);
+	void addRes(vector<string> newline, string path, usint iteration);
 
 	// //Write down the result of Coded Embedding Evaluation 
 	// static void codedwritePt(string* plain, complex<double>* result,long n, long m, long k, long numfeature);

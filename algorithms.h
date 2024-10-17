@@ -282,9 +282,9 @@ namespace ckkseif {
 
 	// void sort(Ciphertext& res, Ciphertext& cipher, long size, long logp, long mod);
 
-	vector<Plaintext> maskPrecompute(const int32_t size, const usint batchSize, const CryptoContext<DCRTPoly> cc);
+	vector<Plaintext> maskPrecompute(const usint size, const usint batchSize, const CryptoContext<DCRTPoly> cc);
 
-	vector<Plaintext> maskPrecompute_full(const int32_t size, const usint batchSize, const CryptoContext<DCRTPoly> cc);
+	vector<Plaintext> maskPrecompute_full(const usint size, const usint batchSize, const CryptoContext<DCRTPoly> cc);
 
 
 	Ciphertext<DCRTPoly> sort(const Ciphertext<DCRTPoly> ciphertext, const int32_t size,  const int32_t bound, const usint scaleModSize, const KeyPair<DCRTPoly> keys, const bool boot1, const bool boot2);

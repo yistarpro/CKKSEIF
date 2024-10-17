@@ -5,7 +5,8 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
-#include "math/chebyshev.h"
+// #include "openfhecore.h"
+// #include "math/chebyshev.h"
 #include <map>
 
 using namespace lbcrypto;
@@ -1078,6 +1079,7 @@ vector<vector<double>> sentencembedding_plain(const CryptoContext<DCRTPoly> cc, 
             } else {
                 for(usint j=0; j< model.m; j++){
                     restmp[k] += table[base+ j*model.m + model.wordtoindex[sentence[k]][j]];
+
                 }
             }
         }
@@ -2818,7 +2820,7 @@ vector<Plaintext> loadquerytf(const CryptoContext<DCRTPoly> cc, const usint pack
 }
 
 
-vector<Plaintext> maskPrecompute(const int32_t size, const usint batchSize, const CryptoContext<DCRTPoly> cc){
+vector<Plaintext> maskPrecompute(const usint size, const usint batchSize, const CryptoContext<DCRTPoly> cc){
     vector<Plaintext> result(3);
 	vector<double> masking(batchSize);
     usint sizesquare = size*size;
@@ -2829,7 +2831,7 @@ vector<Plaintext> maskPrecompute(const int32_t size, const usint batchSize, cons
 	}
 	for(usint i=0; i<(batchSize/sizesquare);i++){
 		usint interval=i*(sizesquare);
-		for(int32_t s=0; s<size; s++){
+		for(usint s=0; s<size; s++){
 			masking[interval+s*size]=1.0;
 		}
 	}
@@ -2842,7 +2844,7 @@ vector<Plaintext> maskPrecompute(const int32_t size, const usint batchSize, cons
 	}
 	for(usint i=0; i<(batchSize/sizesquare);i++){
 		usint interval=i*(sizesquare);
-		for(int32_t s=0; s<size; s++){
+		for(usint s=0; s<size; s++){
 			masking[interval+s]=1.0;
 		}
 	}
@@ -2855,11 +2857,11 @@ vector<Plaintext> maskPrecompute(const int32_t size, const usint batchSize, cons
 	}
 	for(usint i=0; i<(batchSize/sizesquare);i++){
 		usint interval=i*(sizesquare);
-		for(int32_t s=0; s<size; s++){
+		for(usint s=0; s<size; s++){
 			masking[interval+s*size+s]=0.0; //diagonal entries
 		}
-		for(int32_t s=0; s<size; s++){
-			for(int32_t t=0; t<s; t++){
+		for(usint s=0; s<size; s++){
+			for(usint t=0; t<s; t++){
 				masking[interval+s*size+t]=-0.5; //lowertriangle
 			}
 		}
@@ -2871,7 +2873,7 @@ vector<Plaintext> maskPrecompute(const int32_t size, const usint batchSize, cons
 }
 
 
-vector<Plaintext> maskPrecompute_full(const int32_t size, const usint batchSize, const CryptoContext<DCRTPoly> cc){
+vector<Plaintext> maskPrecompute_full(const usint size, const usint batchSize, const CryptoContext<DCRTPoly> cc){
     vector<Plaintext> result(3);
 	vector<double> masking(batchSize);
     usint sizesquare = size*size;
@@ -2880,12 +2882,12 @@ vector<Plaintext> maskPrecompute_full(const int32_t size, const usint batchSize,
 	for(usint s=0; s<batchSize; s++){
 		masking[s]=0.0;
 	}
-    for(int32_t s=0; s<size; s++){
+    for(usint s=0; s<size; s++){
 		masking[s*size]=1.0;
 	}
 	for(usint i=1; i<(batchSize/sizesquare);i++){
 		usint interval=i*(sizesquare);
-		for(int32_t s=0; s<size; s++){
+		for(usint s=0; s<size; s++){
 			masking[interval+s*size]=1.0;
 		}
 	}
@@ -2896,12 +2898,12 @@ vector<Plaintext> maskPrecompute_full(const int32_t size, const usint batchSize,
 	for(usint s=0; s<batchSize; s++){
 		masking[s]=0.0;
 	}
-    for(int32_t s=0; s<size; s++){
+    for(usint s=0; s<size; s++){
 		masking[s]=1.0;
 	}
 	for(usint i=1; i<(batchSize/sizesquare);i++){
 		usint interval=i*(sizesquare);
-		for(int32_t s=0; s<size; s++){
+		for(usint s=0; s<size; s++){
 			masking[interval+s]=1.0;
 		}
 	}
@@ -2917,11 +2919,11 @@ vector<Plaintext> maskPrecompute_full(const int32_t size, const usint batchSize,
             masking[s]=0.5;
         }
         usint initpt = n*slicelength;
-        for(int32_t s=0; s<slicelength; s++){
+        for(usint s=0; s<slicelength; s++){
             masking[initpt+s*size+s]=0.0; //diagonal entries
         }
-        for(int32_t s=0; s<slicelength; s++){
-            for(int32_t t=0; t<s+initpt; t++){
+        for(usint s=0; s<slicelength; s++){
+            for(usint t=0; t<s+initpt; t++){
                 masking[s*size+t]=-0.5; //lowertriangle
             }
         }
@@ -2942,7 +2944,7 @@ Ciphertext<DCRTPoly> sort(const Ciphertext<DCRTPoly> ciphertext, const int32_t s
     batchSize >>=1;
     auto sizesquare = size*size;
 
-    auto masks = maskPrecompute(size, batchSize, cc);
+    auto masks = maskPrecompute((usint)size, batchSize, cc);
 
     Ciphertext<DCRTPoly> tmp, tmp2, copy, result;
 
@@ -3073,7 +3075,7 @@ Ciphertext<DCRTPoly> sort_full(const Ciphertext<DCRTPoly> ciphertext, const int3
     auto numct = sizesquare / batchSize;
     auto slicelength = size / numct;
 
-    auto masks = maskPrecompute_full(size, batchSize, cc);
+    auto masks = maskPrecompute_full((usint)size, batchSize, cc);
 
     Ciphertext<DCRTPoly> tmp, tmp2, copy, result, pert;
     vector<Ciphertext<DCRTPoly>> tmps(numct);

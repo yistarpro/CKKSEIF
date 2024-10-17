@@ -94,7 +94,15 @@ vector<double> getWeight(const usint outputdimension, const usint mk, const stri
 		base+=outputdimension;
 	}
 	fin.close();
-	return table;
+
+	vector<double> transposed(mk*outputdimension);
+	for(usint i=0; i<outputdimension;i++){
+		for(usint j=0; j<mk;j++){
+			transposed[i*mk+j] = table[j*outputdimension+i];
+		}
+	}
+
+	return transposed;
 }
 
 
@@ -289,6 +297,41 @@ map<usint, string> getIndexToWord(string path) {
 
 // }
 
+
+usint checkline(const string path){
+	ifstream fin;
+	string line;
+	fin.open(path, ios::in);
+	if (fin.fail()){
+		cout << "empty" << endl;
+		return 0;
+	}
+
+	usint count=0;
+
+	while(getline(fin, line)){
+		count +=1;
+	}
+	fin.close();
+	cout << count << endl;
+	return count;
+}
+
+
+void addRes(vector<string> newline, string path, usint iteration){
+	fstream fout;	
+	
+	fout.open(path, ios::out | ios::app);
+	if (fout.fail()){
+		std::cerr << "Error!" << std::endl;
+	}
+	for(usint i=0;i<iteration+2;i++){
+		fout << newline[i] << endl;	
+	}
+	fout.close();
+
+}
+
 // void SerializationUtils::codedwritePt(string* plain, complex<double>* result, usint n, usint m, usint k, usint numfeature){
 // 	fstream fout;
 // 	usint mk=m*k;
@@ -422,8 +465,54 @@ vector<string> readsentence(const usint size, usint batchblocknum, usint batchbl
 	
 	usint j=0;
 	while(getline(fin, line)){
-		if(j==batchblocknum*batchblocksize+batchblocksize)break;
-		j++;
+		
+		// if(j>=batchblocknum*batchblocksize){
+		// 	cout << j << endl;
+		// 	string tmpkey=line.substr(0, line.find(", ["));
+		// 	vec=line.substr(line.find(", [")+3);
+		// 	vec.erase(vec.find(']'), 1);
+
+		// 	istringstream iss(vec);       
+		// 	string buffer;
+		// 	usint i=0;
+		// 	bool commacheck = false;
+
+
+
+		// 	while (getline(iss, buffer, ',')) {
+		// 		if(buffer.size()<3){
+		// 			if(commacheck == false){
+		// 				commacheck=true;
+		// 			}else{
+		// 				result.push_back(",");
+		// 				i+=1;
+		// 				commacheck=false;
+		// 				if(i==size)break;
+		// 			}
+		// 		}else{
+		// 			if(buffer[0]==' '){
+		// 				buffer.erase(0, 1);
+		// 			}
+		// 			if(buffer[0]=='\''){
+		// 				buffer.erase(buffer.find('\''), 1);
+		// 				buffer.erase(buffer.find('\''), 1);
+		// 			}else{
+		// 				buffer.erase(buffer.find('\"'), 1);
+		// 				buffer.erase(buffer.find('\"'), 1);
+		// 			}
+		// 			// cout << buffer << endl;
+
+		// 			result.push_back(buffer);
+		// 			i+=1;
+		// 			if(i==size)break;
+		// 		}
+		// 	}
+		// 	while(i < size){
+		// 		result.push_back("<pad>");
+		// 		i+=1;
+		// 	}
+		// }
+
 		if(j>=batchblocknum*batchblocksize){
 			string tmpkey=line.substr(0, line.find(", ["));
 			vec=line.substr(line.find(", [")+3);
@@ -433,38 +522,70 @@ vector<string> readsentence(const usint size, usint batchblocknum, usint batchbl
 			string buffer;
 			usint i=0;
 			bool commacheck = false;
+			string tmp;
+
 
 			while (getline(iss, buffer, ',')) {
-				if(buffer.size()<3){
-					if(commacheck == false){
-						commacheck=true;
-					}else{
-						result.push_back(",");
-						i+=1;
-						commacheck=false;
-						if(i==size)break;
+				if(commacheck==true){
+					commacheck = false;
+					if(buffer.find('\'')<1024){
+						buffer.erase(buffer.find('\''), 1);
 					}
+					if(buffer.find('\"')<1024){
+						buffer.erase(buffer.find('\"'), 1);
+					}
+
+					tmp+=','+buffer;
+					result.push_back(tmp);
+					i+=1;
+					if(i==size)break;
+				
 				}else{
 					if(buffer[0]==' '){
 						buffer.erase(0, 1);
 					}
 					if(buffer[0]=='\''){
 						buffer.erase(buffer.find('\''), 1);
-						buffer.erase(buffer.find('\''), 1);
-					}else{
-						buffer.erase(buffer.find('\"'), 1);
+					}
+					if(buffer[0]=='\''){
 						buffer.erase(buffer.find('\"'), 1);
 					}
-					// cout << buffer << endl;
-					result.push_back(buffer);
-					i+=1;
-					if(i==size)break;
+
+					if(buffer.find('\'')<1024){
+						buffer.erase(buffer.find('\''), 1);
+						result.push_back(buffer);
+
+						i+=1;
+						if(i==size)break;
+					}else{
+						if(buffer.find('\"')<1024){
+						buffer.erase(buffer.find('\"'), 1);
+						result.push_back(buffer);
+						i+=1;
+						if(i==size)break;
+
+						}else{	
+							commacheck = true;
+							tmp = buffer;
+							
+						}
+					}
 				}
+				
+				
+				
 			}
 			while(i < size){
 				result.push_back("<pad>");
 				i+=1;
 			}
+		}
+
+
+		j++;
+
+		if(j==batchblocknum*batchblocksize+batchblocksize){
+			break;
 		}
 	}
 	fin.close();
