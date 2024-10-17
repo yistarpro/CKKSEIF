@@ -466,53 +466,6 @@ vector<string> readsentence(const usint size, usint batchblocknum, usint batchbl
 	usint j=0;
 	while(getline(fin, line)){
 		
-		// if(j>=batchblocknum*batchblocksize){
-		// 	cout << j << endl;
-		// 	string tmpkey=line.substr(0, line.find(", ["));
-		// 	vec=line.substr(line.find(", [")+3);
-		// 	vec.erase(vec.find(']'), 1);
-
-		// 	istringstream iss(vec);       
-		// 	string buffer;
-		// 	usint i=0;
-		// 	bool commacheck = false;
-
-
-
-		// 	while (getline(iss, buffer, ',')) {
-		// 		if(buffer.size()<3){
-		// 			if(commacheck == false){
-		// 				commacheck=true;
-		// 			}else{
-		// 				result.push_back(",");
-		// 				i+=1;
-		// 				commacheck=false;
-		// 				if(i==size)break;
-		// 			}
-		// 		}else{
-		// 			if(buffer[0]==' '){
-		// 				buffer.erase(0, 1);
-		// 			}
-		// 			if(buffer[0]=='\''){
-		// 				buffer.erase(buffer.find('\''), 1);
-		// 				buffer.erase(buffer.find('\''), 1);
-		// 			}else{
-		// 				buffer.erase(buffer.find('\"'), 1);
-		// 				buffer.erase(buffer.find('\"'), 1);
-		// 			}
-		// 			// cout << buffer << endl;
-
-		// 			result.push_back(buffer);
-		// 			i+=1;
-		// 			if(i==size)break;
-		// 		}
-		// 	}
-		// 	while(i < size){
-		// 		result.push_back("<pad>");
-		// 		i+=1;
-		// 	}
-		// }
-
 		if(j>=batchblocknum*batchblocksize){
 			string tmpkey=line.substr(0, line.find(", ["));
 			vec=line.substr(line.find(", [")+3);
@@ -607,13 +560,13 @@ vector<usint> readlabels(usint batchblocknum, usint batchblocksize, const string
 	
 	usint j=0;
 	while(getline(fin, line)){
-		if(j==batchblocknum*batchblocksize+batchblocksize)break;
-		j++;
 		if(j>=batchblocknum*batchblocksize){
 			string tmpkey=line.substr(0, line.find(", ["));
 			usint num= std::stoi(tmpkey);
 			result.push_back(num);
 		}
+		j++;
+		if(j==batchblocknum*batchblocksize+batchblocksize)break;
 	}
 	fin.close();
 	return result;
