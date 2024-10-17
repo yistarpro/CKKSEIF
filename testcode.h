@@ -17,7 +17,7 @@ namespace ckkseif {
 	void binarybootTest(const uint32_t scaleModSize);
 
 
-    void statTime(const vector<double> times, const usint iteration);
+    string statTime(const vector<double> times, const usint iteration);
 
 	void logTest(const double bound, const usint degree, const usint iteration, const uint32_t scaleModSize=35);
 

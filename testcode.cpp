@@ -394,7 +394,7 @@ namespace ckkseif {
     } 
 
 
-    void statTime(const vector<double> times, const usint iteration){
+    string statTime(const vector<double> times, const usint iteration){
         double avg=0.0;
         double std=0.0;
 
@@ -405,8 +405,10 @@ namespace ckkseif {
             std/=iteration;
             std=sqrt(std);
             cout << "Average time = " << avg << ", Std =" << std << endl;
+            return "Average time = "+to_string(avg) + ", Std =" +to_string(std);
         }else{
             cout << "Average time = " << times[0] << endl;
+            return "Average time = "+to_string(times[0]);
         }
     }
 
@@ -2048,7 +2050,7 @@ namespace ckkseif {
             totalauc+=auc;
             // totalloss+=loss;
             cout << "Estimated accuracy:" << auc << " per " << numpredicts << ", Maxerror: " << maxerror << endl;
-            resultlog[i+1] = "Estimated accuracy:" + to_string(auc) + " per " + to_string(numpredicts) + ", Maxerror: " + to_string(maxerror);
+            resultlog[i+1] =to_string(timeEval2[i])+ "Estimated accuracy:" + to_string(auc) + " per " + to_string(numpredicts) + ", Maxerror: " + to_string(maxerror);
 
             //result->SetLength(8);
             //std::cout.precision(8);
@@ -2061,12 +2063,12 @@ namespace ckkseif {
         // std::cout << "LUT: ";
         // statTime(timeEval1, iteration);
         std::cout << "Inference: ";
-        statTime(timeEval2, iteration);
+        string st = statTime(timeEval2, iteration);
         // std::cout << "Total: ";
         // statTime(timeEval, iteration);
         // cout << "Estimated accuracy:" << (double)totalauc /(double)(numpredicts*iteration) << ", Loss: " << totalloss / (double)iteration << ", " << -log2(totalloss / (double)iteration) <<  endl;
         cout << "Estimated accuracy:" << (double)totalauc /(double)(numpredicts*iteration) << ", maxerror: " << maxerror << ", " << -log2(maxerror) <<  endl;
-        resultlog[iteration+1] = "Estimated accuracy:" + to_string((double)totalauc /(double)(numpredicts*iteration)) + ", maxerror: " + to_string(maxerror) + ", " + to_string(-log2(maxerror));
+        resultlog[iteration+1] = st + "Estimated accuracy:" + to_string((double)totalauc /(double)(numpredicts*iteration)) + ", maxerror: " + to_string(maxerror) + ", " + to_string(-log2(maxerror));
 
 	    addRes(resultlog, "logreg_result.txt", iteration);
 
