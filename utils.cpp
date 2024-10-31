@@ -40,22 +40,6 @@ vector<double> repeat(const vector<double> vals, const usint batchSize, const us
     return result;
 }
 
-// complex<double>* UTILS::padcomplex(complex<double>* vals, usint current, usint batchSize) {
-// 	complex<double>* res=new complex<double>[batchSize];
-// 	if(current==batchSize){
-// 		return vals;
-// 	}
-
-// 	for(usint i=0; i<current; i++){
-// 		res[i]=vals[i];
-// 	}
-// 	for(usint i=current; i<batchSize; i++){
-// 		res[i]=0.0;
-// 	}
-// 	return res;
-
-// }
-
 
 // //----------------------------------------------------------------------------------	
 // //   Read & Write
@@ -207,97 +191,6 @@ map<usint, string> getIndexToWord(string path) {
 	return table;
 }
 
-// map<string, complex<double>*> SerializationUtils::getEmb(usint numfeature) {
-// 	string path ="../data/"+to_string(numfeature)+"indextoemb.txt";
-// 	ifstream fin;
-// 	string line;
-// 	string vec;
-// 	map<string, complex<double>*> table;
-
-// 	fin.open(path, ios::in);
-// 	if (fin.fail()){
-// 		std::cerr << "Error!" << std::endl;
-// 		return table;
-// 	}
-	
-
-// 	while(getline(fin, line)){
-// 		string tmpkey=line.substr(0, line.find(", ["));
-// 		vec=line.substr(line.find(", [")+3);
-// 		vec.erase(vec.find(']'), 1);
-// 	    istringstream iss(vec);       
-//     	string buffer;
-// 		double num;
-// 		complex<double>* tmpvalue=new complex<double>[numfeature];
-
-// 		usint i=0;
-// 	    while (getline(iss, buffer, ',')) {
-// 			buffer.erase(buffer.find('\''), 1);
-// 			buffer.erase(buffer.find('\''), 1);
-// 			num= std::stod(buffer);
-//         	tmpvalue[i]=num;
-// 			i+=1;
-//     	}
-// 		table.insert(pair<string, complex<double>*>(tmpkey, tmpvalue));
-// 	}
-// 	fin.close();
-// 	return table;
-// }
-
-// void SerializationUtils::writePt(string* plain, complex<double>* result, usint n, usint vectorsize, usint m, usint k,usint repeatnum, usint numfeature){
-// 	fstream fout;
-// 	usint mk=m*k;
-// 	string path="../data/"+to_string(numfeature)+"_"+to_string(m)+"_"+to_string(k)+"_"+to_string(repeatnum)+"_result.txt";
-
-// 	fout.open(path, ios::out);
-// 	if (fout.fail())
-// 		{
-// 			std::cerr << "Error!" << std::endl;
-// 		}
-// 	usint base=0;
-// 	for(usint i=0; i<(n/(mk*repeatnum)); i++){
-// 		base=i*mk*repeatnum;
-// 		fout << plain[i];
-// 		for(usint j=0; j<vectorsize; j++){
-// 			fout <<  ", " << result[base+j].real();
-// 		}
-// 		if(i!=(n/(mk*repeatnum))-1)fout << endl;
-// 	}
-// 	fout.close();
-// }
-
-// void SerializationUtils::addPt(complex<double>* result, usint n, usint vectorsize, usint m, usint k,usint repeatnum, usint numfeature){
-// 	ifstream fin;
-// 	fstream fout;
-// 	string line;
-// 	usint mk=m*k;
-// 	string path="../data/"+to_string(numfeature)+"_"+to_string(m)+"_"+to_string(k)+"_"+to_string(repeatnum)+"_result.txt";
-
-// 	fin.open(path, ios::in);
-// 	fout.open("../data/tmp.txt", ios::out);
-	
-// 	usint i=0;
-// 	while(getline(fin, line)){
-// 		usint base=i*mk*repeatnum;
-// 		fout << line;
-// 		for(usint j=0; j<vectorsize; j++){
-// 			fout <<  ", " << result[base+j].real();
-// 		}
-// 		if(i!=(n/(mk*repeatnum))-1)fout << endl;
-// 		i+=1;
-// 	}
-// 	fout.close();
-// 	fin.close();
-
-// 	fin.open("../data/tmp.txt", ios::in);
-// 	fout.open(path, ios::out);
-// 	while(getline(fin, line)){
-// 		fout << line << endl;
-// 	}
-
-// }
-
-
 usint checkline(const string path){
 	ifstream fin;
 	string line;
@@ -317,7 +210,6 @@ usint checkline(const string path){
 	return count;
 }
 
-
 void addRes(vector<string> newline, string path, usint iteration){
 	fstream fout;	
 	
@@ -331,125 +223,6 @@ void addRes(vector<string> newline, string path, usint iteration){
 	fout.close();
 
 }
-
-// void SerializationUtils::codedwritePt(string* plain, complex<double>* result, usint n, usint m, usint k, usint numfeature){
-// 	fstream fout;
-// 	usint mk=m*k;
-// 	string path="../data/"+to_string(numfeature)+"_"+to_string(m)+"_"+to_string(k)+"_"+to_string(0)+"_result.txt";
-
-// 	fout.open(path, ios::out);
-// 	if (fout.fail())
-// 		{
-// 			std::cerr << "Error!" << std::endl;
-// 		}
-// 	usint base=0;
-// 	for(usint i=0; i<n; i++){
-// 		fout << plain[i];
-// 		fout <<  ", " << result[i].real();
-// 		fout << endl;
-// 	}
-// 	fout.close();
-// }
-
-// void SerializationUtils::codedaddPt(complex<double>* result, usint n, usint m, usint k, usint numfeature){
-// 	ifstream fin;
-// 	fstream fout;
-// 	string line;
-// 	usint mk=m*k;
-// 	string path="../data/"+to_string(numfeature)+"_"+to_string(m)+"_"+to_string(k)+"_"+to_string(0)+"_result.txt";
-
-// 	fin.open(path, ios::in);
-// 	fout.open("../data/tmp.txt", ios::out);
-	
-// 	usint i=0;
-// 	while(getline(fin, line)){
-// 		fout << line;
-// 		fout <<  ", " << result[i].real();
-
-// 		fout << endl;
-// 		i+=1;
-// 	}
-// 	fout.close();
-// 	fin.close();
-
-// 	fin.open("../data/tmp.txt", ios::in);
-// 	fout.open(path, ios::out);
-// 	while(getline(fin, line)){
-// 		fout << line << endl;
-// 	}
-
-// }
-
-// map<string, complex<double>*> SerializationUtils::readresult(usint numfeature, usint m, usint k,usint repeatnum) {
-// 	ifstream fin;
-// 	string line;
-// 	string vec;
-// 	string path="../data/"+to_string(numfeature)+"_"+to_string(m)+"_"+to_string(k)+"_"+to_string(repeatnum)+"_result.txt";
-// 	map<string, complex<double>*> table;
-
-// 	fin.open(path, ios::in);
-// 	if (fin.fail()){
-// 		std::cerr << "Error!" << std::endl;
-// 		return table;
-// 	}
-	
-
-// 	while(getline(fin, line)){
-// 		string tmpkey=line.substr(0, line.find(", "));
-// 		vec=line.substr(line.find(", ")+2);
-// 	    istringstream iss(vec);       
-//     	string buffer;
-// 		double num;
-// 		complex<double>* tmpvalue=new complex<double>[numfeature];
-// 		usint i=0;
-// 	    while (getline(iss, buffer, ',')) {
-// 			num= std::stod(buffer);
-// 			if(i<numfeature)tmpvalue[i]=num;
-// 			i+=1;
-//     	}
-// 		//cout << tmpkey << endl;
-// 		table.insert(pair<string, complex<double>*>(tmpkey, tmpvalue));
-// 	}
-// 	fin.close();
-// 	return table;
-// }
-
-// Plaintext samplestring(const usint numofsamples, const usint batchSize, const usint interval, const string path){
-// 	ifstream fin;
-// 	string line;
-
-// 	fin.open(path, ios::in);
-// 	if (fin.fail()){
-// 		std::cerr << "Error!" << std::endl;
-// 	}
-
-// 	usint j=0;
-// 	while(getline(fin, line) && j < samplenum){
-// 		plain[j]=line.substr(0, line.find(", ["));
-// 		j+=1;
-// 	}
-// 	while(j<n){
-// 		plain[j]="_";
-// 		j+=1;
-// 	}
-// 	fin.close();
-// }
-
-// void SerializationUtils::foldstring(string sentence, string* msgvec, usint n){
-// 	istringstream iss(sentence);       
-//     string buffer;
-
-// 	usint i=0;
-// 	while (getline(iss, buffer, ' ')) {
-// 		if(i<n)msgvec[i]=buffer;
-// 		i+=1;
-//     }
-// 	while(i<n){
-// 		msgvec[i]="_";
-// 		i+=1;
-// 	}
-// }
-
 
 vector<string> readsentence(const usint size, usint batchblocknum, usint batchblocksize, const string path){
 	ifstream fin;
@@ -545,7 +318,6 @@ vector<string> readsentence(const usint size, usint batchblocknum, usint batchbl
 	return result;
 }
 
-
 vector<usint> readlabels(usint batchblocknum, usint batchblocksize, const string path){
 	ifstream fin;
 	string line;
@@ -571,8 +343,6 @@ vector<usint> readlabels(usint batchblocknum, usint batchblocksize, const string
 	fin.close();
 	return result;
 }
-
-
 
 vector<double> readtexts(const usint size, const string filename, const double scale, const double pad){
 	ifstream fin;
@@ -659,10 +429,8 @@ void mapandwritetext(const Plaintext inputtext, const usint size, const string f
 }
 
 
-
-
 // //----------------------------------------------------------------------------------
-// //   Error Estimation
+// //   Random Number Generation
 // //----------------------------------------------------------------------------------
 
 
@@ -733,6 +501,11 @@ vector<double> fixedDiscreteArray(const usint size, const usint bound) {
 	return result;
 }
 
+
+// //----------------------------------------------------------------------------------
+// //   Parameter Check
+// //----------------------------------------------------------------------------------
+
 void paramcheck(const CryptoContext<DCRTPoly> cc){
     const auto cryptoParamsCKKS =
     std::dynamic_pointer_cast<CryptoParametersCKKSRNS>(
@@ -793,6 +566,9 @@ void bootSet2(CryptoContext<DCRTPoly> cc, const PrivateKey<DCRTPoly> privateKey,
 
 }
 
+// //----------------------------------------------------------------------------------
+// //   Error Estimation
+// //----------------------------------------------------------------------------------
 
 void precision(const Plaintext vals, const vector<double> vals2, const usint size) {
 	double max = 0;
@@ -887,9 +663,6 @@ double countprecisionMute(const Plaintext vals, const vector<double> vals2, cons
 	if(tmp < 0)tmp= -tmp;
 	if(prec > -log2(tmp))prec = -log2(tmp);
 	
-
-	
-
 	return prec;
 }
 
@@ -911,12 +684,10 @@ double countSIMDprecisionMute(const Plaintext vals, const vector<double> vals2, 
 		if(prec > -log2(tmp))prec = -log2(tmp);
 	}
 
-	
-
 	return prec;
 }
 
-double CodedcountprecisionMute(const Plaintext vals, const vector<double> vals2, const usint size, const double resultnum, const bool show) {
+double codedcountprecisionMute(const Plaintext vals, const vector<double> vals2, const usint size, const double resultnum, const bool show) {
 	double tmp=0;
     vector<double> vals1 = vals->GetRealPackedValue();
 	double prec=100;
@@ -930,82 +701,9 @@ double CodedcountprecisionMute(const Plaintext vals, const vector<double> vals2,
 	tmp = (vals1[0]-tmp);
 	if(tmp < 0)tmp= -tmp;
 	if(prec > -log2(tmp))prec = -log2(tmp);
-	
-
-	
 
 	return prec;
 }
-
-
-void binaryprecisiontrack(const Plaintext vals, const usint size,  const vector<double> origin) {
-	double max = 0;
-	double tmp;
-	double tmp2;
-	usint maxloc = 0;
-    vector<double> vals1 = vals->GetRealPackedValue();
-
-	for (usint i = 0; i < size; ++i) {
-		tmp2 = vals1[i];
-		if(tmp2 < 0)tmp2= -tmp2;
-		tmp = (tmp2-1.0);
-		if(tmp < 0)tmp= -tmp;
-		if(tmp > tmp2)tmp=tmp2;
-
-		if(tmp > max){
-			max=tmp;
-			maxloc=i;
-		}
-	}
-	
-    usint prec = -log2(max);
-	cout << "Max origin: " << origin[maxloc] << endl;
-    cout << "Estimated precision in bits:" << prec << ", max error: " << max << endl;
-}
-
-// usint argmaxerror(const Plaintext vals, const usint size) {
-// 	double max = 0;
-// 	double tmp;
-// 	double tmp2;
-// 	usint arg;
-//     vector<double> vals1 = vals->GetRealPackedValue();
-
-// 	for (usint i = 0; i < size; ++i) {
-// 		tmp2 = vals1[i];
-// 		if(tmp2 < 0)tmp2= -tmp2;
-// 		tmp = (tmp2-1.0);
-// 		if(tmp < 0)tmp= -tmp;
-// 		if(tmp > tmp2)tmp=tmp2;
-
-// 		if(tmp > max){
-// 			max=tmp;
-// 			arg=i;
-// 		}
-// 	}
-	
-
-// 	return arg;
-// }
-
-// usint argmax(const Plaintext vals, const usint size) {
-// 	double max = 0;
-// 	double tmp;
-// 	usint arg=0;
-//     vector<double> vals1 = vals->GetRealPackedValue();
-
-// 	for (usint i = 0; i < size; ++i) {
-// 		tmp = vals1[i];
-// 		if(tmp < 0)tmp= -tmp;
-
-// 		if(tmp > max){
-// 			max=tmp;
-// 			arg=i;
-// 		}
-// 	}
-	
-
-// 	return arg;
-// }
 
 void roundprecision(const vector<double> vals1, const vector<double> vals2, const usint size) {
 	double tmp;
@@ -1015,7 +713,6 @@ void roundprecision(const vector<double> vals1, const vector<double> vals2, cons
 		if(((int)tmp) %2 == 0)count++;
 	}
 	
-
     cout << "accurate num:" << count << ", accuracy: " << (double)count/(double)size << endl;
 }
 

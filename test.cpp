@@ -16,24 +16,9 @@ using namespace lbcrypto;
 using namespace std;
 using namespace ckkseif;
 
-void HELUTExperiments(usint iteration){
-    IndicatorTests(iteration, 35);
-    IndicatorTests(iteration, 50);
-
-    LUTSynthTests(8, 2, 16, iteration);
- 	//EmbeddingTests(iteration);
- 	EmbeddingSIMDTests(iteration);
-    //EmbeddingTest(8,8,50,1); // 88526 
-    //EmbeddingSIMDTest(8,8,50,1); //10201
-    AnotherIndicatorTests(iteration);
-}
-
-
 int main(int argc, char **argv) {
 
     int c;
-    // int digit_optind = 0;
-	// int flag = 0;
     usint iteration = 8;
     bool indicator=false;
     bool anotherindicator=false;
@@ -46,8 +31,6 @@ int main(int argc, char **argv) {
     bool info=false;
     bool paralcount=false;
 
-    bool sortsmall=false;
-    bool sortlarge=false;
     bool any=true;
 
     while (1) {
@@ -67,9 +50,6 @@ int main(int argc, char **argv) {
             {"info", no_argument,       0,  'o' },
             {"countall", no_argument,       0,  'b' },
             {"paralcount", no_argument,       0,  'c' },
-
-            {"sort", no_argument,       0,  'd' },
-            {"sortlarge", no_argument,       0,  'f' },
 
 
         };
@@ -97,7 +77,6 @@ int main(int argc, char **argv) {
 
         case 'i':
             iteration=(usint)*optarg-48;
-            // cout << "iteration set to " << iteration << endl;
             break;
 
         case 'a':
@@ -162,16 +141,6 @@ int main(int argc, char **argv) {
             any=false;
             break;
 
-        case 'd':
-            sortsmall=true;
-            any=false;
-            break;
-
-        case 'f':
-            sortlarge=true;
-            any=false;
-            break;
-
 
         default:
             cout << "?? getopt returned character code 0" << c << endl;
@@ -184,16 +153,19 @@ int main(int argc, char **argv) {
             cout << argv[optind++] << endl;
     }
 
-    // any=false; //////////////////////////////////
-    cout << "0708-paral" << endl;
-
-
-    // binarybootTest(50);
-
-
+    cout << "20241101 Version" << endl;
 
     if(any){
+        indicator=true;
+        anotherindicator=true;
+        lutsynth=true;
+        embedding=true;
         logregt=true;
+        count=true;
+        ngram=true;
+        paralcount=true;
+        info=true;
+        any=false;
     }
 
     cout << "iteration set to " << iteration << endl;
@@ -202,12 +174,14 @@ int main(int argc, char **argv) {
         IndicatorTests(iteration, 35);
         IndicatorTests(iteration, 50);
     }
-    if(lutsynth)LUTSynthTests(8, 2, 16, iteration);
-    if(embedding)EmbeddingSIMDTests(iteration);
-    if(anotherindicator)AnotherIndicatorTests(iteration);
-    if(logregt){
-	    // LogregTest(8, 8, 50, 1);
 
+    if(lutsynth)LUTSynthTests(8, 2, 16, iteration);
+
+    if(embedding)EmbeddingSIMDTests(iteration);
+
+    if(anotherindicator)AnotherIndicatorTests(iteration);
+
+    if(logregt){
         LogregTests(iteration);
     }
 
@@ -218,8 +192,6 @@ int main(int argc, char **argv) {
 
 	    NaiveCountTest(50,pow(base,dim), rotsize, iteration);
 	    CodedCountTest(50, base, dim, rotsize, 1, iteration); // sf, base, dim, size, exponentbound, iter 
-	    // CodedCountTest(50, base, dim, rotsize, 2, iteration); // sf, base, dim, size, exponentbound, iter 
-	    // CodedCountTest(50, base, dim, rotsize, 3, iteration); // sf, base, dim, size, exponentbound, iter 
         CodedCountTest(50, base, dim, rotsize, 4, iteration); // sf, base, dim, size, exponentbound, iter 
     }
     if(ngram){
@@ -227,7 +199,6 @@ int main(int argc, char **argv) {
 
         NgramTest(50, 2, 4, rotsize, 4, 2, 0, iteration); //sf, base, dim, size, exponentbound, n, iter 
         NgramTest(50, 2, 4, rotsize, 4, 3, 0, iteration); //sf, base, dim, size, exponentbound, n, iter 
-
         NgramTest(50, 2, 6, rotsize, 6, 2, 10, iteration); //sf, base, dim, size, exponentbound, n, iter 
         NgramTest(50, 2, 6, rotsize, 6, 2, 50, iteration); //sf, base, dim, size, exponentbound, n, iter 
         NgramTest(50, 2, 6, rotsize, 6, 3, 0.1, iteration); //sf, base, dim, size, exponentbound, n, iter 
@@ -248,72 +219,7 @@ int main(int argc, char **argv) {
         InfoRetrievalAfterTFTest(scalingfactor, 1024, 1024, iteration);
     }
 
-    if(sortsmall){
-        SortTest(46,256,128); 
-    }
-
-    if(sortlarge){
-        SortFullTest(46,256,128); 
-    }
-
     
-    //IndicatorTests(1, 59);
-    //AnotherIndicatorTests(1);
-
-	// LogregTest(8, 8, 50, 8);
-
-
-    // SortTest(46,256,128); 
-    // SortFullTest(46,256,128); 
-
-    //usint k=5;
-    //kSorterTest(40, 3*k , 32, k);
-    //SortTest(40,128,32);
-    //usint sf=50;
-    // IndicatorTest(2,1,50);
-    // IndicatorSIMDTest(2,1,50);
-
-
-
-    //SortIterTest(50,128,128); //size, arraybound 
-    //SortIterTest(59,128,128); //size, arraybound 
-	//RoundTest(64, 32, 128 , 1, 50);
-
-    //bootTest(50,16,17);
-
-    //BDtest(50, 16, 2);
-
-	// NaiveCountTest(50, 64, 1024, 1);
-	//logTest(1, 4, 1, 40);
-
-	//NaiveCountTest(50, 64, 1024, 1);
-
-    // usint base = 2;
-    // usint dim = 2;
-    // usint exponentbound=2;
-	// NaiveCountTest(50,pow(base,dim), 1024, iteration);
-	// CodedCountTest(50, base, dim, 8, 4, iteration); // sf, base, dim, size, exponentbound, iter 
-	// CodedCountTest(50, base, dim, 8, 2, iteration); // sf, base, dim, size, exponentbound, iter 
-
-    // NgramTest(50, base, dim, 8, exponentbound, 2, iteration); //sf, base, dim, size, exponentbound, n, iter 
-    // NgramTest(50, base, dim, 8, exponentbound, 3, iteration); //sf, base, dim, size, exponentbound, n, iter 
-
-	// InfoRetrievalTest(50, 2, 2, 256, 1024, 5, iteration);
-
-	// InfoRetrievalTest(50, 2, 2, 1024, 1024, 5, iteration);
-	// InfoRetrievalTest(50, 2, 2, 256, 1024, 5, iteration);
-
-
-    //bootTest2();
-    //bootTest(50);
-    //ptmodulusSwitchTest(40);
-
-
-
-    //ComparisonTests(40,128);
-    // ComparisonTest(50,128);
-    // ComparisonTest(50,1024);
-
     return 0;
 
 }   

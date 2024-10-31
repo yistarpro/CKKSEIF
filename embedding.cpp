@@ -27,7 +27,6 @@ CompressedEmbedding::CompressedEmbedding(const usint m, const usint k, const usi
 	wordtoindex = getWordindex(m, pathWtI);
 	weight=	getWeight(outputdimension, m*k, pathWeight);
 
-
     cout << "Embedding loaded: " << k << " x " << m << " coding with " << outputdimension << " output dimension" << endl;
 
 }
