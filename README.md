@@ -4,7 +4,21 @@ CKKSEIF - Library of Encrypted Indicator Function on CKKS scheme
 This repository is implementation of Encrypted Indicator Function and its application on NLP, on following works:
 
 
-* [KPLC24] Jae-yun Kim, Saerom Park, Joohee Lee, Jung Hee Cheon: Privacy-preserving embedding via look-up table evaluation with fully homomorphic encryption. Forty-first International Conference on Machine Learning, 2024.
+* [KPLC24] Jae-yun Kim, Saerom Park, Joohee Lee, Jung Hee Cheon: Privacy-preserving embedding via look-up table evaluation with fully homomorphic encryption. Forty-first International Conference on Machine Learning, 2024. [Link]
+
+```
+@inproceedings{2024embedding,
+  title={Privacy-preserving embedding via look-up table evaluation with fully homomorphic encryption},
+  author={Kim, Jae-yun and Park, Saerom and Lee, Joohee and Cheon, Jung Hee},
+  booktitle={Proceedings of the 41st International Conference on Machine Learning},
+  pages={24437--24457},
+  year={2024}
+}
+```
+
+[Link]:https://openreview.net/forum?id=apxON2uH4N
+
+
 
 * [KYCP24] Jae-yun Kim, Jieun Yun, Jung Hee Cheon, Saerom Park: Efficient Privacy-Preserving Counting Method with Homomorphic Encryption. 27th International Conference on Information Security and Cryptology, 2024.
 
