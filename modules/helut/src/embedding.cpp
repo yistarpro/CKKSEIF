@@ -10,6 +10,7 @@ using namespace std;
 namespace ckkseif {
 
 
+// HELUT §2.2 — CompressedEmbedding model: stores (k, m, d) parameters, codebook weights, and word→codes map.
 CompressedEmbedding::CompressedEmbedding(const usint m, const usint k, const usint outputdimension): m(m), k(k), outputdimension(outputdimension) {
 	string basicpath="../data/";
 	if(outputdimension==50){
@@ -31,6 +32,7 @@ CompressedEmbedding::CompressedEmbedding(const usint m, const usint k, const usi
 
 }
 
+// HELUT App. E.2 — LogregModel: logistic-regression head trained on top of CompressedEmbedding.
 LogregModel::LogregModel(const usint m, const usint k, const usint outputdimension): m(m), k(k), outputdimension(outputdimension) {
 	string basicpath="../data/";
 	if(outputdimension==50){
