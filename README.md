@@ -42,7 +42,7 @@ This code is based on OpenFHE
 * [Design paper for OpenFHE](https://eprint.iacr.org/2022/915)
 * [OpenFHE website](https://openfhe.org)
 
-Note our implementation is on version 1.2.3. A helper installation script is provided:
+Note our implementation is on version 1.2.3. A helper installation script for prerequisite components is provided:
 
 ```
 bash scripts/install_openfhe.sh
@@ -58,7 +58,7 @@ These data contain compressed embedding, indices for the embedding, parameter of
 
 Put the files in `data` folder. The TF-IDF data for the information retrieval experiment is included in the linked archive as well. See `data/README.md` for the per-file format and the list of required artifacts.
 
-Then build the project (the `build/` directory is gitignored - every user creates it themselves):
+Then build the project:
 
 ```
 mkdir build
