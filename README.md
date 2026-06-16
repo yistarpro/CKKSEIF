@@ -42,13 +42,7 @@ This code is based on OpenFHE
 * [Design paper for OpenFHE](https://eprint.iacr.org/2022/915)
 * [OpenFHE website](https://openfhe.org)
 
-Note our implementation is on version 1.2.3. A helper installation script for prerequisite components is provided:
-
-```
-bash scripts/install_openfhe.sh
-```
-
-After installing OpenFHE, get data from the following link:
+Note our implementation is on version 1.1.4. After installing OpenFHE, get data from the following link:
 
 * https://drive.google.com/file/d/17YVk3uR_Q25j0ebJzyrblDupi1aMtwhz/view?usp=sharing
 
